@@ -1,5 +1,5 @@
-PRG            = pingpong2
-OBJ            = pingpong2.o rfm12.o uart.o
+PRG            = txtest
+OBJ            = txtest.o rfm12.o uart.o
 MCU_TARGET     = atmega8
 OPTIMIZE       = -Os
 
@@ -11,7 +11,7 @@ LAUNCH_BOOTLOADER = foodloader-0.21/launcher/launch-bootloader
 SERIAL = /dev/ttyUSB0
 
 
-DEFS           = -DF_CPU=12000000
+DEFS           = -DF_CPU=16000000
 LIBS           =
 
 # You should not have to change anything below here.
@@ -20,7 +20,7 @@ CC             = avr-gcc
 
 # Override is only needed by avr-lib build system.
 
-override CFLAGS        =  -g -Wall $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS) -Irfm12-1.1
+override CFLAGS        =  -g -Wall $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS)
 override LDFLAGS       = -Wl,-Map,$(PRG).map
 
 OBJCOPY        = avr-objcopy
@@ -32,12 +32,8 @@ $(PRG).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 clean:
-#	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak 
-#	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
-
-	del *.o 
-	del *.lst
-	del *.map
+	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak 
+	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
 
 flash:
 #	$(ERASECMD)
