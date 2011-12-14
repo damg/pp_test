@@ -160,12 +160,10 @@ char uart_getc()
 #ifdef UART_INTERRUPT
 char uart_getc_nb(char *c)
 {
-	if (rxhead==rxtail) 
-		return 0;
+	if (rxhead==rxtail) return 0;
 
 	*c = *rxtail;
- 	if (++rxtail == (rxbuf + UART_RXBUFSIZE)) 
-		rxtail = rxbuf;
+ 	if (++rxtail == (rxbuf + UART_RXBUFSIZE)) rxtail = rxbuf;
 
 	return 1;
 }
@@ -180,30 +178,3 @@ char uart_getc_nb(char *c)
 	return 0;
 }
 #endif // UART_INTERRUPT
-
-
-uint8_t uart_getline_nb( char* pBuffer )
-{
-	char* pB = pBuffer;
-	*pB = 0; 
-	
-	while ( uart_getc_nb(pB) && (pB != '\r') )
-	{
-		pB++;
-	}
-	
-	return ( pB - pBuffer );
-}
-
-/*
-uint8_t uart_collectline( char* pBuffer, int* iPos )
-{
-	pBuffer += iPos;
-	
-	while ( ( uart_getc_nb(pBuffer) > 0 ) && (*pBuffer != '\r') )
-	{
-		pBuffer++;
-	}
-	
-	return (*pBuffer == '\r');
-} */

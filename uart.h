@@ -17,6 +17,8 @@
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 
+#define UART_INTERRUPT	1
+
 void uart_init();
 
 void uart_putc(char c);
@@ -30,7 +32,9 @@ char uart_getc_nb(char *c);		// returns 1 on success
 //get one Cariage return terminated line
 //echo charakters back on Uart
 //returns buffer with zero terminated line on success, 0 pointer otherwise
-char * uart_getline_nb();
+uint8_t uart_getline_nb( char* pBuffer );
+
+uint8_t uart_collectline( char* pBuffer, int* iPos );
 
 #endif
 

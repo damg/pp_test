@@ -181,24 +181,40 @@ char uart_getc_nb(char *c)
 }
 #endif // UART_INTERRUPT
 
+uint8_t uart_getline( char* pBuffer, uint8_t maxSize )
+{
+	char ch;
+	uint8_t count = 0;
+	
+	*pBuffer = 0;
+	
+	while ( ( ch = uart_getc() ) && ( ch != '\r' ) && ( maxSize > 0 ) )
+	{
+		*pBuffer = ch;
+		pBuffer++;
+		count++;
+		maxSize--;
+	}
+	
+	return count;
+}
 
 uint8_t uart_getline_nb( char* pBuffer )
 {
 	char* pB = pBuffer;
 	*pB = 0; 
 	
-	while ( uart_getc_nb(pB) && (pB != '\r') )
+	while ( uart_getc_nb(pB) && (*pB != '\r') )
 	{
 		pB++;
 	}
 	
-	return ( pB - pBuffer );
+	return (uint8_t)( pB - pBuffer );
 }
 
-/*
-uint8_t uart_collectline( char* pBuffer, int* iPos )
+uint8_t uart_collectline( char* pBuffer, uint8_t* iPos )
 {
-	pBuffer += iPos;
+	pBuffer += (char)iPos;
 	
 	while ( ( uart_getc_nb(pBuffer) > 0 ) && (*pBuffer != '\r') )
 	{
@@ -206,4 +222,4 @@ uint8_t uart_collectline( char* pBuffer, int* iPos )
 	}
 	
 	return (*pBuffer == '\r');
-} */
+} 

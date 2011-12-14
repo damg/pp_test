@@ -47,69 +47,69 @@
 
 
 //Pin that the RFM12's slave select is connected to
-#define DDR_SS						DDRB
-#define PORT_SS						PORTB
-#define BIT_SS						2
+#define DDR_SS DDRB
+#define PORT_SS PORTB
+#define BIT_SS 2
 
 //SPI port
-#define DDR_SPI						DDRB
-#define PORT_SPI					PORTB
-#define PIN_SPI						PINB
-#define BIT_MOSI					3
-#define BIT_MISO					4
-#define BIT_SCK						5
-#define BIT_SPI_SS					2
+#define DDR_SPI DDRB
+#define PORT_SPI PORTB
+#define PIN_SPI PINB
+#define BIT_MOSI 3
+#define BIT_MISO 4
+#define BIT_SCK  5
+#define BIT_SPI_SS 2
 //this is the hardware SS pin of the AVR - it 
 //needs to be set to output for the spi-interface to work 
 //correctly, independently of the CS pin used for the RFM12
 
 //frequency to use
-#define FREQ						433000000UL
-#define RFM12_BASEBAND				RFM12_BAND_433
+#define FREQ 433000000UL
+#define RFM12_BASEBAND RFM12_BAND_433
 
 //use this for datarates >= 2700 Baud
-#define DATARATE_VALUE				RFM12_DATARATE_CALC_HIGH(9600.0)
+#define DATARATE_VALUE RFM12_DATARATE_CALC_HIGH(9600.0)
 
 //use this for 340 Baud < datarate < 2700 Baud
 //#define DATARATE_VALUE RFM12_DATARATE_CALC_LOW(1200.0)
 
 /**** TX BUFFER SIZE
  */
-#define RFM12_TX_BUFFER_SIZE		30
+#define RFM12_TX_BUFFER_SIZE 30
 
 /**** RX BUFFER SIZE
  * there are going to be 2 Buffers of this size
  * (double_buffering)
  */
-#define RFM12_RX_BUFFER_SIZE		30
+#define RFM12_RX_BUFFER_SIZE 30
 
 /**** INTERRUPT VECTOR
  * define the interrupt vector settings here
  */
  
 //the interrupt vector
-#define RFM12_INT_VECT				(INT0_vect)
+#define RFM12_INT_VECT (INT0_vect)
 
 //the interrupt mask register
-#define RFM12_INT_MSK				GICR
+#define RFM12_INT_MSK GICR
 
 //the interrupt bit in the mask register
-#define RFM12_INT_BIT				(INT0)
+#define RFM12_INT_BIT (INT0)
 
 //the interrupt flag register
-#define RFM12_INT_FLAG				GIFR
+#define RFM12_INT_FLAG GIFR
 
 //the interrupt bit in the flag register
-#define RFM12_FLAG_BIT				(INTF0)
+#define RFM12_FLAG_BIT (INTF0)
 
 //setup the interrupt to trigger on negative edge
-#define RFM12_INT_SETUP()			MCUCR |= (1<<ISC01)
+#define RFM12_INT_SETUP()   MCUCR |= (1<<ISC01)
 
 
 /**** UART DEBUGGING
  * en- or disable debugging via uart.
  */
-#define RFM12_UART_DEBUG 			0
+#define RFM12_UART_DEBUG 0
 
 /*
 This is a bitmask that defines how "rude" this library behaves
@@ -120,15 +120,12 @@ This is a bitmask that defines how "rude" this library behaves
 /* control rate, frequency, etc during runtime
  * this setting will certainly add a bit code
  **/
-#define RFM12_LIVECTRL				0
-#define RFM12_NORETURNS				0
-#define RFM12_USE_WAKEUP_TIMER		0
-#define RFM12_TRANSMIT_ONLY			0
+#define RFM12_LIVECTRL 0
+#define RFM12_NORETURNS 0
+#define RFM12_USE_WAKEUP_TIMER 1
+#define RFM12_TRANSMIT_ONLY 1
 
 /* Disable interrupt vector and run purely inline. This may be useful for
  * configurations where a hardware interrupt is not available.
  */
-#define RFM12_USE_POLLING			0
-#define RFM12_NOCOLLISIONDETECTION 	0
-
-
+#define RFM12_NOIRQ 0
