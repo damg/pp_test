@@ -17,8 +17,6 @@
 #include <inttypes.h>
 #include <avr/pgmspace.h>
 
-#define UART_INTERRUPT	1
-
 void uart_init();
 
 void uart_putc(char c);

@@ -45,7 +45,7 @@ SUBDIRS :=
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../protocol.c \
-../rfm12.c \
+../rfm12-1.1/src/rfm12.c \
 ../rts_net.c \
 ../uart.c
 
@@ -123,7 +123,13 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 ./%.o: .././%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler
-	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DF_CPU=12000000  -Os -fpack-struct -fshort-enums -Wall -c -std=gnu99  -mmcu=atmega8   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
+	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DF_CPU=12000000  -Os -Wall -c -std=gnu99 -v  -mmcu=atmega8   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
+	@echo Finished building: $<
+
+./%.o: ../rfm12-1.1/src/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler
+	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DF_CPU=12000000  -Os -Wall -c -std=gnu99 -v  -mmcu=atmega8   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
 	@echo Finished building: $<
 
 

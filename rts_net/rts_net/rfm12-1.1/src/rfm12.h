@@ -40,6 +40,8 @@
 #ifndef _RFM12_H
 #define _RFM12_H
 
+//#include "../../rfm12_config_rts.h"
+
 /** \name States for rx and tx buffers
 * \anchor rxtx_states
 * \see rfm12_rx_status() and rfm12_control_t
@@ -91,6 +93,7 @@ void rfm12_tx(uint8_t len, uint8_t type, uint8_t *data);
 #else
 uint8_t rfm12_start_tx(uint8_t type, uint8_t length);
 uint8_t rfm12_tx(uint8_t len, uint8_t type, uint8_t *data);
+uint8_t rfm12_tx_status();		//AO
 #endif
 
 //if polling is used, define a polling function

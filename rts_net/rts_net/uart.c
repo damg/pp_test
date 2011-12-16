@@ -7,10 +7,14 @@
 
 #include "uart.h"
 
-#define UART_BAUD_RATE 19200
-//#define UART_INTERRUPT
-#define UART_RXBUFSIZE 50
-#define UART_TXBUFSIZE 50
+#ifdef UART_LEDS
+	#include "io_avrfnkbrd.h"
+#endif
+
+#define UART_BAUD_RATE	19200
+#define UART_INTERRUPT	1
+#define UART_RXBUFSIZE	10
+#define UART_TXBUFSIZE	50
 
 
 #define UART_BAUD_CALC(UART_BAUD_RATE,F_OSC) ((F_OSC)/((UART_BAUD_RATE)*16L)-1)
@@ -25,7 +29,7 @@ volatile static char *volatile txhead, *volatile txtail;
 
 SIGNAL(SIG_UART_DATA) {
 #ifdef UART_LEDS	
-	PORTC ^= 0x01;
+	LED1_ON;
 #endif
 	
 	if ( txhead == txtail ) {
@@ -40,7 +44,7 @@ SIGNAL(SIG_UART_RECV) {
 	int diff; 
 
 #ifdef UART_LEDS
-	PORTC ^= 0x02;
+	LED2_ON;
 #endif
 	
 	/* buffer full? */
@@ -59,12 +63,12 @@ SIGNAL(SIG_UART_RECV) {
 
 
 void uart_init() {
-	PORTD |= 0x01;				//Pullup an RXD an
+	//PORTD |= 0x01;					//Pullup an RXD an
 
-	UCSRB |= (1<<TXEN);			//UART TX einschalten
+	UCSRB |= (1<<TXEN);					//UART TX einschalten
 	UCSRC |= (1<<URSEL)|(3<<UCSZ0);		//Asynchron 8N1
 
-	UCSRB |= ( 1 << RXEN );			//Uart RX einschalten
+	UCSRB |= ( 1 << RXEN );				//Uart RX einschalten
 
 	UBRRH=(uint8_t)(UART_BAUD_CALC(UART_BAUD_RATE,F_CPU)>>8);
 	UBRRL=(uint8_t)(UART_BAUD_CALC(UART_BAUD_RATE,F_CPU));
@@ -195,6 +199,7 @@ uint8_t uart_getline( char* pBuffer, uint8_t maxSize )
 		count++;
 		maxSize--;
 	}
+	pBuffer[maxSize-1] = 0;
 	
 	return count;
 }
@@ -214,7 +219,7 @@ uint8_t uart_getline_nb( char* pBuffer )
 
 uint8_t uart_collectline( char* pBuffer, uint8_t* iPos )
 {
-	pBuffer += (char)iPos;
+	pBuffer += (char)(*iPos);
 	
 	while ( ( uart_getc_nb(pBuffer) > 0 ) && (*pBuffer != '\r') )
 	{

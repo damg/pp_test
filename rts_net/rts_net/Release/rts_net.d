@@ -18,7 +18,7 @@ rts_net.d rts_net.o: .././rts_net.c \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdio.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/include/stdarg.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdlib.h \
- .././io_avrfnkbrd.h .././uart.h \
+ .././io_avrfnkbrd.h .././rfm12_config_rts.h .././uart.h \
  c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/avr/pgmspace.h \
  .././protocol.h
 
@@ -61,6 +61,8 @@ c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/av
 c:\program\ files\ (x86)\atmel\avr\ studio\ 5.0\avr\ toolchain\bin\../lib/gcc/avr/4.5.1/../../../../avr/include/stdlib.h:
 
 .././io_avrfnkbrd.h:
+
+.././rfm12_config_rts.h:
 
 .././uart.h:
 

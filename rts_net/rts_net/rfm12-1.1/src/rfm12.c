@@ -43,13 +43,15 @@
  * library internal includes
  * the order in which they are included is important
 */
+#include "../../rfm12_config_rts.h"
 #include "include/rfm12_hw.h"
 #include "include/rfm12_core.h"
 #include "rfm12.h"
 
 //for uart debugging
 #if RFM12_UART_DEBUG
-	#include "test-m8/uart.h"
+	//#warning "RFM12_UART_DEBUG enabled"
+	#include "../../uart.h"
 #endif
 
 
@@ -120,11 +122,17 @@ rfm12_control_t ctrl;
 #if (RFM12_USE_POLLING)
 void rfm12_poll(void)
 #else
+//#warning "RFM12_INT_VECT enabled"
 ISR(RFM12_INT_VECT, ISR_NOBLOCK)
 #endif
 {
 	RFM12_INT_OFF();
 	uint8_t status;
+	
+	//debug
+	#if RFM12_UART_DEBUG >= 2
+		uart_putc('i');
+	#endif
 	
 	//if receive mode is not disabled (default)
 	#if !(RFM12_TRANSMIT_ONLY)
@@ -289,6 +297,10 @@ ISR(RFM12_INT_VECT, ISR_NOBLOCK)
 			
 			//flag the buffer as free again
 			ctrl.txstate = STATUS_FREE;
+
+			#if RFM12_UART_DEBUG >= 2
+				uart_putc('f');
+			#endif
 			
 			//wakeup timer feature
 			#if RFM12_USE_WAKEUP_TIMER
@@ -368,7 +380,8 @@ void rfm12_tick(void)
 					uart_putc ('t');
 					break;
 				default:
-					uart_putc ('?');
+					uart_putc ( '?' );
+					break;
 			}
 			uart_putstr ("\r\n");
 			oldstate = state;
@@ -517,14 +530,16 @@ uint8_t
 rfm12_tx(uint8_t len, uint8_t type, uint8_t *data)
 {
 	#if RFM12_UART_DEBUG
-		uart_putstr ("sending packet\r\n");
+		uart_putstr ("rfm12_tx\r\n");
 	#endif
 	
 	if (len > RFM12_TX_BUFFER_SIZE) return TXRETURN(RFM12_TX_ERROR);
 
 	//exit if the buffer isn't free
-	if(ctrl.txstate != STATUS_FREE)
+	if (ctrl.txstate != STATUS_FREE)
+	{
 		return TXRETURN(RFM12_TX_OCCUPIED);
+	}		
 	
 	memcpy ( rf_tx_buffer.buffer, data, len );
 
@@ -673,5 +688,11 @@ void rfm12_init(void)
 	
 	//activate the interrupt
 	RFM12_INT_ON();	
+}
+
+// zum Pruefen ob Buffer frei (STATUS_FREE)
+uint8_t rfm12_tx_status()
+{
+	return ctrl.txstate;	
 }
 

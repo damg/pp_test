@@ -33,7 +33,7 @@ LSS_FILE_PATH :=
 LSS_FILE_PATH_AS_ARGS :=
 MAP_FILE_PATH :=
 MAP_FILE_PATH_AS_ARGS :=
-AVR_APP_PATH :=C:/Programme/Atmel/AVR Studio 5.0/AVR ToolChain/bin/
+AVR_APP_PATH :=C:/Program Files (x86)/Atmel/AVR Studio 5.0/AVR ToolChain/bin/
 QUOTE := "
 ADDITIONAL_DEPENDENCIES:=
 OUTPUT_FILE_DEP:=
@@ -44,7 +44,8 @@ SUBDIRS :=
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
-../rfm12.c \
+../protocol.c \
+../rfm12-1.1/src/rfm12.c \
 ../rts_net.c \
 ../uart.c
 
@@ -56,24 +57,28 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+protocol.o \
 rfm12.o \
 rts_net.o \
 uart.o
 
 
 OBJS_AS_ARGS +=  \
+protocol.o \
 rfm12.o \
 rts_net.o \
 uart.o
 
 
 C_DEPS +=  \
+protocol.d \
 rfm12.d \
 rts_net.d \
 uart.d
 
 
 C_DEPS_AS_ARGS +=  \
+protocol.d \
 rfm12.d \
 rts_net.d \
 uart.d
@@ -113,10 +118,18 @@ OUTPUT_FILE_DEP:= ./makedep.mk
 
 
 
+
+
 ./%.o: .././%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler
-	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -funsigned-char -funsigned-bitfields -O0 -fpack-struct -fshort-enums -g2 -Wall -c -std=gnu99  -mmcu=atmega8   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
+	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DF_CPU=12000000 -DRFM12_UART_DEBUG=2  -Os -fshort-enums -mshort-calls -g2 -Wall -pedantic -pedantic-errors -c -std=gnu99  -mmcu=atmega8   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
+	@echo Finished building: $<
+
+./%.o: ../rfm12-1.1/src/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler
+	$(QUOTE)$(AVR_APP_PATH)avr-gcc.exe$(QUOTE) -funsigned-char -funsigned-bitfields -DF_CPU=12000000 -DRFM12_UART_DEBUG=2  -Os -fshort-enums -mshort-calls -g2 -Wall -pedantic -pedantic-errors -c -std=gnu99  -mmcu=atmega8   -MD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o"$@" "$<"
 	@echo Finished building: $<
 
 
